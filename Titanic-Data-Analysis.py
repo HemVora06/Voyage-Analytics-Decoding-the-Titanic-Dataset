@@ -44,3 +44,5 @@ print(titanic_dataset.dtypes)
 for column in titanic_dataset.select_dtypes(include='category').columns:
     print(f"{column}: {titanic_dataset[column].unique()}")
 
+plt.plot(titanic_dataset['Age'], titanic_dataset['Fare'])
+plt.show()
