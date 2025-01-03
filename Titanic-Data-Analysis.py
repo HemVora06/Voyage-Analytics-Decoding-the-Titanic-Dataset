@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import missingno as msno
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -52,13 +52,20 @@ print(titanic_dataset.duplicated().sum()) #0
 
 # Identifying anymore inconsistencies
 print(titanic_dataset.describe()) #Summary of the dataset
-plt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])#Checking for outliers
+
+#Checking for outliers
+titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
+for i in titanic_dataset['fare_zscore']:
+    if abs(i) > 3:
+        print(i)
 
 #Fixing the inconsistencies
-titanic_dataset.loc[titanic_dataset['Fare'] >200, 'Fare'] = titanic_dataset['Fare'].mean()
+titanic_dataset.loc[titanic_dataset['fare_zscore'] >= 3, 'Fare'] = titanic_dataset['Fare'].mean()
 
 #Checking the graph now
-plt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])
-
+print('Checking....')
+for i in titanic_dataset['fare_zscore']:
+    if abs(i) > 3.5:
+        print(i)
 
 plt.show()
