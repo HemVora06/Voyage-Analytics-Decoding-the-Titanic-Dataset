@@ -44,5 +44,9 @@ print(titanic_dataset.dtypes)
 for column in titanic_dataset.select_dtypes(include='category').columns:
     print(f"{column}: {titanic_dataset[column].unique()}")
 
+#Investigating the Relation between Age and Fare by plotting them.
 plt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])
 plt.show()
+
+#Checking For Duplicates
+print(titanic_dataset.duplicated().sum())
