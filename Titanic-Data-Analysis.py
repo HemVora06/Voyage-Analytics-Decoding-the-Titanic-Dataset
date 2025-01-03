@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import missingno as msno
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -44,9 +45,20 @@ print(titanic_dataset.dtypes)
 for column in titanic_dataset.select_dtypes(include='category').columns:
     print(f"{column}: {titanic_dataset[column].unique()}")
 
-#Investigating the Relation between Age and Fare by plotting them.
-plt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])
-plt.show()
+
 
 #Checking For Duplicates
-print(titanic_dataset.duplicated().sum())
+print(titanic_dataset.duplicated().sum()) #0
+
+# Identifying anymore inconsistencies
+print(titanic_dataset.describe()) #Summary of the dataset
+#lt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])#Checking for outliers
+
+#Fixing the inconsistencies
+titanic_dataset.loc[titanic_dataset['Fare'] >200, 'Fare'] = titanic_dataset['Fare'].mean()
+
+#Checking the graph now
+plt.scatter(titanic_dataset['Age'], titanic_dataset['Fare'])
+
+
+plt.show()
