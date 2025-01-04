@@ -55,17 +55,23 @@ print(titanic_dataset.describe()) #Summary of the dataset
 
 #Checking for outliers
 titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
-for i in titanic_dataset['fare_zscore']:
-    if abs(i) > 3:
-        print(i)
+#for i in titanic_dataset['fare_zscore']:
+ #   if abs(i) > 3:
+  #      print(i)
 
 #Fixing the inconsistencies
-titanic_dataset.loc[titanic_dataset['fare_zscore'] >= 3, 'Fare'] = titanic_dataset['Fare'].mean()
+
+print(titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
+print(titanic_dataset['Fare'].mean())
+titanic_dataset.loc[titanic_dataset['Fare'] >= 200, 'Fare'] = titanic_dataset['Fare'].mean()
+titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
+print(titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
 
 #Checking the graph now
 print('Checking....')
-for i in titanic_dataset['fare_zscore']:
-    if abs(i) > 3.5:
-        print(i)
+#for i in titanic_dataset['fare_zscore']:
+ #   if abs(i) > 3:
+#        print(i)
+
 
 plt.show()
