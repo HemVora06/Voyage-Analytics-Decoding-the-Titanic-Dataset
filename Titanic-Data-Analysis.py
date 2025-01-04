@@ -10,7 +10,7 @@ titanic_dataset = pd.read_csv("C:\Hem\Titanic_Machine_Learning_Project\Titanic_d
 
 '''Inspecting Dataset'''
 
-#print(titanic_dataset.head())
+print(titanic_dataset.head())
 print(titanic_dataset.dtypes)
 
 '''Finding and Handelling Missing values'''
@@ -45,7 +45,7 @@ print(titanic_dataset.dtypes)
 for column in titanic_dataset.select_dtypes(include='category').columns:
     print(f"{column}: {titanic_dataset[column].unique()}")
 
-
+'''Basic Exploratary Analysis:'''
 
 #Checking For Duplicates
 print(titanic_dataset.duplicated().sum()) #0
@@ -55,23 +55,37 @@ print(titanic_dataset.describe()) #Summary of the dataset
 
 #Checking for outliers
 titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
-#for i in titanic_dataset['fare_zscore']:
- #   if abs(i) > 3:
-  #      print(i)
+#Outliers:
+print('Outliers: \n', titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
 
-#Fixing the inconsistencies
 
+#Implementing Z-Score Based Dynamic Thresholding
+group_mean=titanic_dataset.groupby('Pclass')['Fare'].transform('mean')
+titanic_dataset['Fare']=titanic_dataset.apply(lambda x:group_mean[x.name] if x['fare_zscore']>=3 else x['Fare'], axis=1)
+
+#Checking if the outliers are reduced:
 print(titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
-print(titanic_dataset['Fare'].mean())
-titanic_dataset.loc[titanic_dataset['Fare'] >= 200, 'Fare'] = titanic_dataset['Fare'].mean()
-titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
-print(titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
+'''The zscore doesn't fall because for it to change, z score needs to be calculated again and there will
+be outliers in that as well and this will result to overfitting of the data. 
+So as long as the fare has changed, it's all good.'''
 
-#Checking the graph now
-print('Checking....')
-#for i in titanic_dataset['fare_zscore']:
- #   if abs(i) > 3:
-#        print(i)
+#Visualizing the data
 
+#Histogram for Age
+sns.histplot(titanic_dataset['Age'], bins=30, kde=True)
+plt.title('Distribution of Age')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
 
+#Histogram for Fare
+sns.histplot(titanic_dataset['Fare'], bins=30, kde=True)
+plt.title('Distribution of Fare')
+plt.xlabel('Fare')
+plt.ylabel('Frequency')
+plt.show()
+
+#Heatmap of the correlation matrix
+corr_matrix = titanic_dataset.corr(numeric_only=True)
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
 plt.show()
