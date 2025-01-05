@@ -105,4 +105,39 @@ plt.show()
 #Inspecting any Non-Standard Value
 print(titanic_dataset.loc[titanic_dataset['Age']==0, 'Age'])
 print(titanic_dataset.loc[titanic_dataset['Age']>90, 'Age'])
-print(titanic_dataset.loc[titanic_dataset['Survived']!=(1 and 0), 'Survived'])
+
+#Distribution of Survivours and Non-Survivours
+sns.countplot(x='Survived', data=titanic_dataset, palette='pastel')
+plt.title('Distribution of Survivours and Non-Survivours', fontsize=18)
+plt.xlabel('Survived(0=No, 1=Yes)', fontsize=16)
+plt.ylabel('Count', fontsize=16)
+plt.show()
+
+#Distribution of Survivours and Non-Survivours based on Demographics
+#By Sex
+sns.countplot(x='Survived', hue='Sex', data=titanic_dataset, palette='pastel')
+plt.title('Distribution of Survivours and Non-Survivours based on Sex', fontsize=14)
+plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
+plt.ylabel('Count', fontsize=12)
+plt.show()
+
+#By Class
+sns.countplot(x='Survived', hue='Pclass', data=titanic_dataset, palette='pastel')
+plt.title('Distribution of Survivours and Non-Survivours based on Class', fontsize=14)
+plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
+plt.ylabel('Count', fontsize=12)
+plt.show()
+
+#By Embarkment
+sns.countplot(x='Survived', hue='Embarked', data=titanic_dataset, palette='pastel')
+plt.title('Distribution of Survivours and Non-Survivours based on Embarkment', fontsize=14)
+plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
+plt.ylabel('Count', fontsize=12)
+plt.show()
+
+#By Age
+sns.countplot(x='Survived', hue='Age', data=titanic_dataset, palette='pastel')
+plt.title('Distribution of Survivours and Non-Survivours based on Age', fontsize=18)
+plt.xlabel('Survived(0=No, 1=Yes)', fontsize=16)
+plt.ylabel('Count', fontsize=16)
+plt.show()
