@@ -53,10 +53,21 @@ print(titanic_dataset.duplicated().sum()) #0
 # Identifying anymore inconsistencies
 print(titanic_dataset.describe()) #Summary of the dataset
 
-#Checking for outliers
+#Calculating the Z Score of Fare
 titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
 
-#Outliers:
+#Checking for outliers
+print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
+
+#Since, fare for someone older than a todller can't be 0, we'll cange it by implementing Fare Based Dynamic Thresholding
+group_mean=titanic_dataset.groupby('Age')['Fare'].transform('mean')
+titanic_dataset['Fare']=titanic_dataset.apply(lambda x:group_mean[x.name] if x['Fare']==0 else x['Fare'], axis=1)
+
+#Checking if the outliers are reduced:
+print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
+#Outliers Reduced
+
+#Checking for outliers
 print('Outliers: \n', titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
 
 
@@ -93,9 +104,5 @@ plt.show()
 
 #Inspecting any Non-Standard Value
 print(titanic_dataset.loc[titanic_dataset['Age']==0, 'Age'])
-print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
-
-#Since, fare for someone older than a todller can't be 0, we'll cange it by implementing Fare Based Dynamic Thresholding
-group_mean=titanic_dataset.groupby('Age')['Fare'].transform('mean')
-titanic_dataset['Fare']=titanic_dataset.apply(lambda x:group_mean[x.name] if x['Fare']==0 else x['Fare'], axis=1)
-print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
+print(titanic_dataset.loc[titanic_dataset['Age']>90, 'Age'])
+print(titanic_dataset.loc[titanic_dataset['Survived']!=(1 and 0), 'Survived'])
