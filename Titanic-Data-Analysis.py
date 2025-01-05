@@ -55,6 +55,7 @@ print(titanic_dataset.describe()) #Summary of the dataset
 
 #Checking for outliers
 titanic_dataset['fare_zscore'] = stats.zscore(titanic_dataset['Fare'])
+
 #Outliers:
 print('Outliers: \n', titanic_dataset[titanic_dataset['fare_zscore'] >= 3][['Fare', 'fare_zscore']])
 
@@ -85,7 +86,16 @@ plt.xlabel('Fare')
 plt.ylabel('Frequency')
 plt.show()
 
-#Heatmap of the correlation matrix
+#Examining the Heatmap of the Correlation Matrix
 corr_matrix = titanic_dataset.corr(numeric_only=True)
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
 plt.show()
+
+#Inspecting any Non-Standard Value
+print(titanic_dataset.loc[titanic_dataset['Age']==0, 'Age'])
+print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
+
+#Since, fare for someone older than a todller can't be 0, we'll cange it by implementing Fare Based Dynamic Thresholding
+group_mean=titanic_dataset.groupby('Age')['Fare'].transform('mean')
+titanic_dataset['Fare']=titanic_dataset.apply(lambda x:group_mean[x.name] if x['Fare']==0 else x['Fare'], axis=1)
+print(titanic_dataset.loc[titanic_dataset['Fare']==0, 'Age'])
