@@ -135,9 +135,15 @@ plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
 plt.ylabel('Count', fontsize=12)
 plt.show()
 
-#By Age
-sns.countplot(x='Survived', hue='Age', data=titanic_dataset, palette='pastel')
-plt.title('Distribution of Survivours and Non-Survivours based on Age', fontsize=18)
-plt.xlabel('Survived(0=No, 1=Yes)', fontsize=16)
-plt.ylabel('Count', fontsize=16)
+#Calculating mean, median, mode and standard deviation of nly some specific columns
+summary_stats= pd.DataFrame({
+    'Mean': [titanic_dataset['Age'].mean(), titanic_dataset['Fare'].mean()]
+    , 'Median': [titanic_dataset['Age'].median(), titanic_dataset['Fare'].median()]
+    , 'Mode': [titanic_dataset['Age'].mode()[0], titanic_dataset['Fare'].mode()[0]]
+    , 'Standard Deviation': [titanic_dataset['Age'].std(), titanic_dataset['Fare'].std()]},
+    index=['Age', 'Fare'])
+print(summary_stats)
+
+#Understanding the distribution of Fares using the boxplot
+sns.boxplot(x='Pclass', y='Fare', data=titanic_dataset)
 plt.show()
