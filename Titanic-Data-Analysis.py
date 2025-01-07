@@ -4,11 +4,11 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-'''Importing Titanic Dataset'''
+#Importing Titanic Dataset
 
 titanic_dataset = pd.read_csv("C:\Hem\Titanic_Machine_Learning_Project\Titanic_dataset.csv")
 
-'''Inspecting Dataset'''
+#Inspecting Dataset
 
 print(titanic_dataset.head())
 print(titanic_dataset.dtypes)
@@ -35,8 +35,6 @@ print("Improved Dataset: \n", titanic_dataset)
 #Changing the datatype of categorical columns to 'Category' from 'Object'
 
 titanic_dataset['Sex']=titanic_dataset['Sex'].astype('category')
-titanic_dataset['Survived']=titanic_dataset['Survived'].astype('category')
-titanic_dataset['Pclass']=titanic_dataset['Pclass'].astype('category')
 titanic_dataset['Embarked']=titanic_dataset['Embarked'].astype('category')
 print(titanic_dataset.dtypes)
 
@@ -135,7 +133,7 @@ plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
 plt.ylabel('Count', fontsize=12)
 plt.show()
 
-#Calculating mean, median, mode and standard deviation of nly some specific columns
+#Calculating mean, median, mode and standard deviation of only some specific columns
 summary_stats= pd.DataFrame({
     'Mean': [titanic_dataset['Age'].mean(), titanic_dataset['Fare'].mean()]
     , 'Median': [titanic_dataset['Age'].median(), titanic_dataset['Fare'].median()]
@@ -147,3 +145,18 @@ print(summary_stats)
 #Understanding the distribution of Fares using the boxplot
 sns.boxplot(x='Pclass', y='Fare', data=titanic_dataset)
 plt.show()
+'''As seen in the box plot, the First class is pretty equally distributed,
+the Second class is quite Positively Skewed since the median line is quite close to the bottom,
+the Third class, however, is Extremely Positively Skewed 
+as the median line disappears while leaving a lot of outliers.
+This is a problem for many Machine Learning Algorithms like Linear Regression that assume normality in the data,
+so this has to be dealt with at the time of implementing the algorithms.'''
+
+#Using Violin Plot to Visualize the Relationship between Age and class
+sns.violinplot(x='Pclass', y='Age', data=titanic_dataset, split=True)
+plt.show()
+
+#Calculating the Mean Survival Rate by Class
+
+pclass_survival_rate = titanic_dataset.groupby('Pclass')['Survived'].mean() * 100
+print(pclass_survival_rate)
