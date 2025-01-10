@@ -32,12 +32,6 @@ print("Null Data: \n", titanic_dataset.isnull().sum())
 print("Improved Dataset: \n", titanic_dataset)
 #An Acceptable Solution.
 
-#Changing the datatype of categorical columns to 'Category' from 'Object'
-
-titanic_dataset['Sex']=titanic_dataset['Sex'].astype('category')
-titanic_dataset['Embarked']=titanic_dataset['Embarked'].astype('category')
-print(titanic_dataset.dtypes)
-
 #Checking for Unique values in Categorical Columns
 
 for column in titanic_dataset.select_dtypes(include='category').columns:
@@ -157,6 +151,44 @@ sns.violinplot(x='Pclass', y='Age', data=titanic_dataset, split=True)
 plt.show()
 
 #Calculating the Mean Survival Rate by Class
-
 pclass_survival_rate = titanic_dataset.groupby('Pclass')['Survived'].mean() * 100
 print(pclass_survival_rate)
+
+#Calculating Average Age and Fare as per the Class
+pclass_avg_age_fare = titanic_dataset.groupby('Pclass')[['Age', 'Fare']].mean()
+print(pclass_avg_age_fare)
+
+#Investigating the Relation between Age and Fare using Scatter Plot
+sns.scatterplot(x='Age', y='Fare', data=titanic_dataset)
+plt.show
+
+#Calculating Mode and MEdian for the Embarked column
+embarked_mode = titanic_dataset['Embarked'].mode()[0]
+numeric_embarked=titanic_dataset['Embarked'].map({'S':1, 'C':2, 'Q':3})
+embarked_median = numeric_embarked.median()
+print('Embarked Mode & Median: ', embarked_mode, ', ', embarked_median)
+
+#Summarizng the “SibSp” and “Parch” columns with descriptive statistics.
+summary_stats=pd.DataFrame({
+    'Minimum':[titanic_dataset['SibSp'].min(), titanic_dataset['Parch'].min()],
+    'Maximum':[titanic_dataset['SibSp'].max(), titanic_dataset['Parch'].max()],
+    'Mean':[titanic_dataset['SibSp'].mean(), titanic_dataset['Parch'].mean()],
+    'Median':[titanic_dataset['SibSp'].median(), titanic_dataset['Parch'].median()],
+    'Mode':[titanic_dataset['SibSp'].mode()[0], titanic_dataset['Parch'].mode()[0]]
+}, 
+index=['Sibsp', 'Parch'])
+print(summary_stats)
+
+#Creating a new feature 'Family Size'
+titanic_dataset['Family Size'] = titanic_dataset['SibSp'] + titanic_dataset['Parch']+1
+print(titanic_dataset['Family Size'])
+
+#Creating a pivot table to summarize survival rates across different combinations of "Pclass" and "Sex"
+pivot_table=pd.pivot_table(data=titanic_dataset, index='Pclass', values='Survived', columns='Sex', aggfunc='mean', margins=True)
+print(pivot_table)
+
+#Plotting a bar chart to show the survival rate by “Sex” and “Pclass”
+sns.barplot(x='Pclass', y='Survived', hue='Sex', data=titanic_dataset)
+plt.xlabel('Pclass')
+plt.ylabel('Survival Count')
+plt.show()
