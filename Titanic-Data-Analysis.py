@@ -162,7 +162,7 @@ print(pclass_avg_age_fare)
 sns.scatterplot(x='Age', y='Fare', data=titanic_dataset)
 plt.show
 
-#Calculating Mode and MEdian for the Embarked column
+#Calculating Mode and Median for the Embarked column
 embarked_mode = titanic_dataset['Embarked'].mode()[0]
 numeric_embarked=titanic_dataset['Embarked'].map({'S':1, 'C':2, 'Q':3})
 embarked_median = numeric_embarked.median()
@@ -190,5 +190,32 @@ print(pivot_table)
 #Plotting a bar chart to show the survival rate by “Sex” and “Pclass”
 sns.barplot(x='Pclass', y='Survived', hue='Sex', data=titanic_dataset)
 plt.xlabel('Pclass')
-plt.ylabel('Survival Count')
+plt.ylabel('Survival Rate')
+plt.show()
+
+#Exploring the relationships between numerical and categorical variables using box plots
+sns.boxplot(x='Embarked', y='Fare', data=titanic_dataset)
+plt.show()
+
+#Visualize the distribution of “Age” by “Survived” using a box plot
+sns.boxplot(x='Survived', y='Age', data=titanic_dataset)
+plt.show()
+
+#Explore the relationship between “Age” and “Fare” through a correlation matrix
+corr_matrix_age_fare=titanic_dataset[['Age', 'Fare']].corr(numeric_only=True)
+print(corr_matrix_age_fare)
+
+#Group by “Pclass” and plot the distribution of “Fare” for each class
+sns.boxplot(x='Pclass', y='Fare', data=titanic_dataset)
+plt.show()
+
+#19. Calculate and visualize the proportion of each age group (“Child”, “Adult”, “Senior”).
+#   - Child: 0-19
+#   - Adult: 20-64
+#   - Senior: 65-120
+titanic_dataset['Age Group'] = pd.cut(titanic_dataset['Age'], bins=[0, 20, 65, 120], labels=['Child', 'Adult','Senior'], include_lowest=True)
+print(titanic_dataset['Age Group'])
+
+#Create a visualization showing the relationship between family size and survival rate
+sns.barplot(x='Family Size', y='Survived', data=titanic_dataset)
 plt.show()
