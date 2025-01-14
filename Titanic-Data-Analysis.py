@@ -80,19 +80,16 @@ sns.histplot(titanic_dataset['Age'], bins=30, kde=True)
 plt.title('Distribution of Age')
 plt.xlabel('Age')
 plt.ylabel('Frequency')
-plt.show()
 
 #Histogram for Fare
 sns.histplot(titanic_dataset['Fare'], bins=30, kde=True)
 plt.title('Distribution of Fare')
 plt.xlabel('Fare')
 plt.ylabel('Frequency')
-plt.show()
 
 #Examining the Heatmap of the Correlation Matrix
 corr_matrix = titanic_dataset.corr(numeric_only=True)
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
-plt.show()
 
 #Inspecting any Non-Standard Value
 print(titanic_dataset.loc[titanic_dataset['Age']==0, 'Age'])
@@ -103,7 +100,6 @@ sns.countplot(x='Survived', data=titanic_dataset, palette='pastel')
 plt.title('Distribution of Survivours and Non-Survivours', fontsize=18)
 plt.xlabel('Survived(0=No, 1=Yes)', fontsize=16)
 plt.ylabel('Count', fontsize=16)
-plt.show()
 
 #Distribution of Survivours and Non-Survivours based on Demographics
 #By Sex
@@ -111,21 +107,18 @@ sns.countplot(x='Survived', hue='Sex', data=titanic_dataset, palette='pastel')
 plt.title('Distribution of Survivours and Non-Survivours based on Sex', fontsize=14)
 plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
 plt.ylabel('Count', fontsize=12)
-plt.show()
 
 #By Class
 sns.countplot(x='Survived', hue='Pclass', data=titanic_dataset, palette='pastel')
 plt.title('Distribution of Survivours and Non-Survivours based on Class', fontsize=14)
 plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
 plt.ylabel('Count', fontsize=12)
-plt.show()
 
 #By Embarkment
 sns.countplot(x='Survived', hue='Embarked', data=titanic_dataset, palette='pastel')
 plt.title('Distribution of Survivours and Non-Survivours based on Embarkment', fontsize=14)
 plt.xlabel('Survived(0=No, 1=Yes)', fontsize=12)
 plt.ylabel('Count', fontsize=12)
-plt.show()
 
 #Calculating mean, median, mode and standard deviation of only some specific columns
 summary_stats= pd.DataFrame({
@@ -138,7 +131,6 @@ print(summary_stats)
 
 #Understanding the distribution of Fares using the boxplot
 sns.boxplot(x='Pclass', y='Fare', data=titanic_dataset)
-plt.show()
 '''As seen in the box plot, the First class is pretty equally distributed,
 the Second class is quite Positively Skewed since the median line is quite close to the bottom,
 the Third class, however, is Extremely Positively Skewed 
@@ -148,7 +140,6 @@ so this has to be dealt with at the time of implementing the algorithms.'''
 
 #Using Violin Plot to Visualize the Relationship between Age and class
 sns.violinplot(x='Pclass', y='Age', data=titanic_dataset, split=True)
-plt.show()
 
 #Calculating the Mean Survival Rate by Class
 pclass_survival_rate = titanic_dataset.groupby('Pclass')['Survived'].mean() * 100
@@ -160,7 +151,6 @@ print(pclass_avg_age_fare)
 
 #Investigating the Relation between Age and Fare using Scatter Plot
 sns.scatterplot(x='Age', y='Fare', data=titanic_dataset)
-plt.show
 
 #Calculating Mode and Median for the Embarked column
 embarked_mode = titanic_dataset['Embarked'].mode()[0]
@@ -191,15 +181,12 @@ print(pivot_table)
 sns.barplot(x='Pclass', y='Survived', hue='Sex', data=titanic_dataset)
 plt.xlabel('Pclass')
 plt.ylabel('Survival Rate')
-plt.show()
 
 #Exploring the relationships between numerical and categorical variables using box plots
 sns.boxplot(x='Embarked', y='Fare', data=titanic_dataset)
-plt.show()
 
 #Visualize the distribution of “Age” by “Survived” using a box plot
 sns.boxplot(x='Survived', y='Age', data=titanic_dataset)
-plt.show()
 
 #Explore the relationship between “Age” and “Fare” through a correlation matrix
 corr_matrix_age_fare=titanic_dataset[['Age', 'Fare']].corr(numeric_only=True)
@@ -207,7 +194,6 @@ print(corr_matrix_age_fare)
 
 #Group by “Pclass” and plot the distribution of “Fare” for each class
 sns.boxplot(x='Pclass', y='Fare', data=titanic_dataset)
-plt.show()
 
 #19. Calculate and visualize the proportion of each age group (“Child”, “Adult”, “Senior”).
 #   - Child: 0-19
@@ -218,4 +204,31 @@ print(titanic_dataset['Age Group'])
 
 #Create a visualization showing the relationship between family size and survival rate
 sns.barplot(x='Family Size', y='Survived', data=titanic_dataset)
-plt.show()
+
+#Normalize and standardize the "Fare" column
+class MinMaxScaler:
+    def __init__(self, feature_range):
+        self.feature_range = feature_range
+        self.min_=None
+        self.max_=None
+
+    def fit(self, X):
+        #Find Min and Max of the Feature
+        self.min_=X.min(axis=0)
+        self.max_=X.max(axis=0)
+        return self
+
+    def transform(self, X):
+        #Apply MinMax formula
+        scaled=((X-self.min_)/(self.max_-self.min_))
+        scaled = scaled * (self.feature_range[1] - self.feature_range[0]) + self.feature_range[0]
+        return scaled
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)
+
+scaler=MinMaxScaler(feature_range=(0, 1))
+fare_array = titanic_dataset[['Fare']].values
+titanic_dataset['Normalized Fare']=scaler.fit_transform(fare_array)
+print(titanic_dataset['Normalized Fare'])
+
