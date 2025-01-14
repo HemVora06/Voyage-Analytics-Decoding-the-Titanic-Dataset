@@ -223,12 +223,35 @@ class MinMaxScaler:
         scaled=((X-self.min_)/(self.max_-self.min_))
         scaled = scaled * (self.feature_range[1] - self.feature_range[0]) + self.feature_range[0]
         return scaled
+
     def fit_transform(self, X):
+        #Add Fit and Transform Functions
         self.fit(X)
         return self.transform(X)
 
 scaler=MinMaxScaler(feature_range=(0, 1))
 fare_array = titanic_dataset[['Fare']].values
-titanic_dataset['Normalized Fare']=scaler.fit_transform(fare_array)
-print(titanic_dataset['Normalized Fare'])
+titanic_dataset['Normalized_Fare']=scaler.fit_transform(fare_array)
+print(titanic_dataset['Normalized_Fare'].head())
 
+class StandardScaler:
+    def __init__(self):
+        self.mean_=None
+        self.standard_deviation_=None
+    def fit(self, X):
+        #Find Mean and Standard Deviation of the Feature
+        self.mean_=X.mean()
+        self.standard_deviation_=X.std()
+        return self
+    def transform(self, X):
+        #Apply Standardization formula
+        scaled=(X-self.mean_)/self.standard_deviation_
+        return scaled
+    def fit_transform(self, X):
+        #Add Fit and Transform Functions
+        self.fit(X)
+        return self.transform(X)
+
+scaler2=StandardScaler()
+titanic_dataset['Standardized_Fare']=scaler2.fit_transform(titanic_dataset[['Fare']])
+print(titanic_dataset['Standardized_Fare'].head())
