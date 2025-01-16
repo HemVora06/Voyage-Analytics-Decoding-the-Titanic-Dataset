@@ -255,3 +255,17 @@ class StandardScaler:
 scaler2=StandardScaler()
 titanic_dataset['Standardized_Fare']=scaler2.fit_transform(titanic_dataset[['Fare']])
 print(titanic_dataset['Standardized_Fare'].head())
+
+#One hot encoding the sex and embarked columns
+titanic_dataset = pd.get_dummies(titanic_dataset, columns=['Sex', 'Embarked'])
+titanic_dataset['Embarked_C'] = titanic_dataset['Embarked_C'].astype('int')
+titanic_dataset['Embarked_S'] = titanic_dataset['Embarked_S'].astype('int')
+titanic_dataset['Embarked_Q'] = titanic_dataset['Embarked_Q'].astype('int')
+titanic_dataset['Sex_male']=titanic_dataset['Sex_male'].astype('int')
+titanic_dataset['Sex_female']=titanic_dataset['Sex_female'].astype('int')
+print(titanic_dataset['Sex_male'].head())
+
+#Removing columns that are not useful for analysis (e.g., "Name", "Ticket")
+titanic_dataset.drop('Name', axis=1, inplace = True)
+titanic_dataset.drop('Ticket', axis=1, inplace = True)
+titanic_dataset.drop('Cabin', axis=1, inplace = True)
