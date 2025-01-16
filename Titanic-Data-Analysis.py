@@ -170,11 +170,11 @@ index=['Sibsp', 'Parch'])
 print(summary_stats)
 
 #Creating a new feature 'Family Size'
-titanic_dataset['Family Size'] = titanic_dataset['SibSp'] + titanic_dataset['Parch']+1
+titanic_dataset['Family Size'] = titanic_dataset['SibSp'] + titanic_dataset['Parch'] + 1
 print(titanic_dataset['Family Size'])
 
 #Creating a pivot table to summarize survival rates across different combinations of "Pclass" and "Sex"
-pivot_table=pd.pivot_table(data=titanic_dataset, index='Pclass', values='Survived', columns='Sex', aggfunc='mean', margins=True)
+pivot_table = pd.pivot_table(data=titanic_dataset, index='Pclass', values='Survived', columns='Sex', aggfunc='mean', margins=True)
 print(pivot_table)
 
 #Plotting a bar chart to show the survival rate by “Sex” and “Pclass”
@@ -230,8 +230,7 @@ class MinMaxScaler:
         return self.transform(X)
 
 scaler=MinMaxScaler(feature_range=(0, 1))
-fare_array = titanic_dataset[['Fare']].values
-titanic_dataset['Normalized_Fare']=scaler.fit_transform(fare_array)
+titanic_dataset['Normalized_Fare']=scaler.fit_transform(titanic_dataset['Fare'])
 print(titanic_dataset['Normalized_Fare'].head())
 
 class StandardScaler:
@@ -263,9 +262,21 @@ titanic_dataset['Embarked_S'] = titanic_dataset['Embarked_S'].astype('int')
 titanic_dataset['Embarked_Q'] = titanic_dataset['Embarked_Q'].astype('int')
 titanic_dataset['Sex_male']=titanic_dataset['Sex_male'].astype('int')
 titanic_dataset['Sex_female']=titanic_dataset['Sex_female'].astype('int')
-print(titanic_dataset['Sex_male'].head())
+print(titanic_dataset.head())
 
 #Removing columns that are not useful for analysis (e.g., "Name", "Ticket")
 titanic_dataset.drop('Name', axis=1, inplace = True)
 titanic_dataset.drop('Ticket', axis=1, inplace = True)
 titanic_dataset.drop('Cabin', axis=1, inplace = True)
+
+#Scaling the numeric features "Age" MinMaxScaler and StandardScaler
+titanic_dataset['Normalized_Age']=scaler.fit_transform(titanic_dataset['Age'])
+print(titanic_dataset['Normalized_Age'].head())
+titanic_dataset['Standardized_Age']=scaler2.fit_transform(titanic_dataset['Age'])
+print(titanic_dataset['Standardized_Age'].head())
+
+#Perform a final inspection of the dataset after cleaning to ensure accuracy and consistency
+print(titanic_dataset.head())
+print(titanic_dataset.describe(include=[np.number]))
+
+titanic_dataset.to_csv('Cleaned_Titanic_Dataset.csv')
