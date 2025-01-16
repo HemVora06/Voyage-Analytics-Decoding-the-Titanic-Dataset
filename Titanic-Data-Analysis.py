@@ -279,4 +279,7 @@ print(titanic_dataset['Standardized_Age'].head())
 print(titanic_dataset.head())
 print(titanic_dataset.describe(include=[np.number]))
 
-titanic_dataset.to_csv('Cleaned_Titanic_Dataset.csv')
+#Creating new 'IsAlone' feature
+titanic_dataset['IsAlone'] = (titanic_dataset['SibSp'] == 0) & (titanic_dataset['Parch'] == 0)
+titanic_dataset['IsAlone'] = titanic_dataset['IsAlone'].astype('int')
+print(titanic_dataset['IsAlone'])
