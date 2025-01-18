@@ -283,8 +283,3 @@ print(titanic_dataset.describe(include=[np.number]))
 titanic_dataset['IsAlone'] = (titanic_dataset['SibSp'] == 0) & (titanic_dataset['Parch'] == 0)
 titanic_dataset['IsAlone'] = titanic_dataset['IsAlone'].astype('int')
 print(titanic_dataset['IsAlone'])
-
-#Creating a Recursive Feature Eliminator for optimum Feature Selection from Scratch
-
-    #Creating a Machine Learning model to search for the optimum Features
-     
